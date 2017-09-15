@@ -1,0 +1,7 @@
+# Object files
+*.lock.json
+[Bb]in/
+[Oo]bj/
+*TestResult.xml
+BenchmarkDotNet.Artifacts
+
