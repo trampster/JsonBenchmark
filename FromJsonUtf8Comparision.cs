@@ -5,40 +5,39 @@ using JsonSrcGen;
 
 namespace JsonBenchmark
 {
-    public class FromJsonComparision
+    public class FromJsonUtf8Comparision
     {
-        string _json;
+        byte[] _json;
         IJsonConverter<JsonTestClass> _jsonConverter;
 
-        public FromJsonComparision()
+        public FromJsonUtf8Comparision()
         {
-            _json = "{\"FirstName\":\"John\",\"LastName\":\"Smith\",\"Age\":12,\"Registered\":true}";
+            _json = Encoding.UTF8.GetBytes("{\"FirstName\":\"John\",\"LastName\":\"Smith\",\"Age\":12, \"Registered\":true}");
             _jsonConverter = JsonFactory.Compile<JsonTestClass>();
         }
 
         [Benchmark]
-        public JsonTestClass Jsonics() => _jsonConverter.FromJson(_json);
+        public JsonTestClass NewtonsoftJson()
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<JsonTestClass>(Encoding.UTF8.GetString(_json));
+        }
 
         [Benchmark]
-        public JsonTestClass NewtonsoftJson() => Newtonsoft.Json.JsonConvert.DeserializeObject<JsonTestClass>(_json);
+        public JsonTestClass NetJson() => NetJSON.NetJSON.Deserialize<JsonTestClass>(Encoding.UTF8.GetString(_json));
 
         [Benchmark]
-        public JsonTestClass NetJson() => NetJSON.NetJSON.Deserialize<JsonTestClass>(_json);
-
-        [Benchmark]
-        public JsonTestClass JIL() => Jil.JSON.Deserialize<JsonTestClass>(_json);
+        public JsonTestClass JIL() => Jil.JSON.Deserialize<JsonTestClass>(Encoding.UTF8.GetString(_json));
 
         [Benchmark]
         public JsonTestClass UTF8JSon()
         {
-            var jsonBytes = Encoding.UTF8.GetBytes(_json);
-            return Utf8Json.JsonSerializer.Deserialize<JsonTestClass>(jsonBytes);
+            return Utf8Json.JsonSerializer.Deserialize<JsonTestClass>(_json);
         }
 
         [Benchmark]
         public JsonTestClass SpanJSON()
         {
-            return SpanJson.JsonSerializer.Generic.Utf16.Deserialize<JsonTestClass>(_json);
+            return SpanJson.JsonSerializer.Generic.Utf8.Deserialize<JsonTestClass>(_json);
         }
 
         [Benchmark]

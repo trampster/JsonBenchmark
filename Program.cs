@@ -9,7 +9,7 @@ namespace JsonBenchmark
     {
         public static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<FromJsonComparision>();
+            var summary = BenchmarkRunner.Run<ToJsonUtf8Comparision>();
         }
     }
 }

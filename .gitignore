@@ -5,3 +5,4 @@
 *TestResult.xml
 BenchmarkDotNet.Artifacts
 
+.vscode/tasks.json
